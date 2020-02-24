@@ -1,0 +1,125 @@
+p, input, ul {
+	padding:10px;
+}
+
+p {
+	text-indent:4%;
+}
+
+
+
+ul {
+	font-style:italic;
+	color:red;
+
+}
+
+a{
+	text-decoration: none;
+	color: black;
+
+}
+
+body {
+	padding:8%;
+	padding-top:44px;
+	background-color:#fee464;
+/*
+    background-image:
+    linear-gradient(#fd0 .1em, transparent .1em);
+    background-size: 100% 1.7em;
+*/
+
+}
+
+#categories {
+	border-right: #eb4 1px dotted;
+	margin:0;
+	padding-left:30px;
+	padding-top:60px;
+}
+
+h1 {
+	border-bottom: #eb4 1px dotted;
+	padding:30px;
+	margin:0;
+	display:block;
+	font-size: 26px;
+	text-align: center;
+}
+
+#word {
+	border: 3px powderblue solid;
+	border-radius: 44px;
+	padding: 50px;
+	padding-left:100px;
+	margin:20px;
+	margin-bottom:44px;
+}
+
+#content {
+	
+	display:grid;
+	grid-template-columns: 17% 1fr;
+
+}
+
+#set {
+	padding:52px;
+}
+
+
+.move#add {
+    background-color:aqua;
+    border: 1px solid gray;
+    border-radius: 90px;
+    width:50px;
+    height:50px;
+    text-align: center;
+    font-size: 33px;
+    color: cadetblue;
+    
+    position: fixed;
+    bottom: 50px;
+    right: 30px;
+    
+}
+
+.article {
+
+	background-color:white;
+	padding:100px;
+	padding-top:30px;
+	padding-bottom:52px;
+	border-radius:90px;
+	margin:20px;
+
+/*				 공책 줄무늬
+*/				
+    background-color: #fff;
+	background-image:
+	linear-gradient(90deg, transparent 160px, #abced4 160px, #abced4 162px, transparent 162px),
+	linear-gradient(#eee .1em, transparent .1em);
+	background-size: 100% 1.2em;
+    
+ 
+    }
+
+   @media (max-width: 800px) {
+        .article {
+
+            background-color: #fff;
+            background-image:
+            linear-gradient(90deg, transparent 63px, #abced4 63px, #abced4 65px, transparent 65px),
+            linear-gradient(#eee .1em, transparent .1em);
+            background-size: 100% 1.2em;
+            
+    }
+        
+	
+	/*background-color: #eddc8a;
+	background-image: url("https://www.transparenttextures.com/patterns/exclusive-paper.png");
+	 This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+
+	
+}
