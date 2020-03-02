@@ -11,6 +11,7 @@ p {
 ul {
 	font-style:italic;
 	color:red;
+    font-family: 'Noto Sans KR';
 
 }
 
@@ -23,7 +24,8 @@ a{
 body {
 	padding:8%;
 	padding-top:44px;
-	background-color:#fee464;
+    font-family: 'Nanum Myeongjo';
+/*	background-color:#fee464;*/
 /*
     background-image:
     linear-gradient(#fd0 .1em, transparent .1em);
@@ -46,6 +48,7 @@ h1 {
 	display:block;
 	font-size: 26px;
 	text-align: center;
+    font-family: 'Noto Sans KR';
 }
 
 #word {
@@ -120,6 +123,13 @@ h1 {
 	/*background-color: #eddc8a;
 	background-image: url("https://www.transparenttextures.com/patterns/exclusive-paper.png");
 	 This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
+}
 
-	
+.on_off {
+    text-align: right;
+    float: right;
+    position: relative;
+    left: 40px;
+    bottom: 5px;
+    
 }
