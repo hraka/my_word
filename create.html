@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+	<head>
+		<title>언어 사전</title>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="style.css">
+	</head>
+
+	<body>
+		<div>
+			<h1><a href="index.html">언어에 대하여</a></h1>
+			
+			<div id="content">
+				<div id="categories">
+					<strong>카테고리</strong>
+					<ul>
+						<li><a href="index.php?word=sample.txt">언어</a></li>
+						<li><a href="index.php?word=sample2.txt">단어</a></li>
+						<li><a href="3.html">사전</a></li>
+					</ul>
+
+					<form action="create_prosess.php" method="post">
+					
+						<p>
+							<input type="text" name="title" placeholder="title">
+						</p>
+						<p>
+							<textarea name="description" placeholder="Description"></textarea>
+						</p>
+
+						<p>
+							<input type="submit">
+						</p>	
+
+					</form>
+					
+
+
+				</div>
+
+			</div>
+		</div>
+
+	</body>
+	
+	<?php
+    fclose($opfile);
+
+    ?>
+
+</html>
+
+
+
