@@ -48,23 +48,11 @@ function get_valid_file() {
     }
 }
 
-function count_word_exploded($count_num) {
-	if($count_num > 1) {
-		return 1;
-	} else if($count_num == 1) {
-		return 0;
-	} else {
-		return 0;
-	}
-	
-}
-
 
 function get_meaning_list_from_file($filename){
     $opfile = fopen($filename, 'r');
     $contents = fread($opfile, filesize($filename));
-    $word_explode = explode("*", $contents);
-    $meaning_explode = explode("+", $word_explode[count_word_exploded(count($word_explode))]);
+    $meaning_explode = explode("+", $contents);
     fclose($opfile);
     echo "되었는가?";    
     return $meaning_explode;
