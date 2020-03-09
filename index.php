@@ -23,13 +23,24 @@ function print_filelink_list(){
     }
 }
 
+
+function get_onoff_button(){
+	return "
+	<div>
+		<input type=\"radio\" id=\"off\" name=\"on_off\" value=\"off\">
+		<label for=\"off\">끄기</label>
+		<input type=\"radio\" id=\"on\" name=\"on_off\" value=\"on\">
+		<label for=\"on\">켜기</label>
+	</div>";
+}
+
 function print_meaning($meaning_explode){
     if(isset($meaning_explode)) {
 
         $i = 0;
         while($i < count($meaning_explode)) {                            
             if(trim($meaning_explode[$i]) != "") {
-                echo "<div class=\"article\" id=\"article$i\">\n <p>$meaning_explode[$i]</p>\n </div>";
+                make_card($meaning_explode[$i]);
             }
             $i = $i + 1;
         }
@@ -38,6 +49,15 @@ function print_meaning($meaning_explode){
     }
 
 }
+
+function make_card($meaning){
+	echo "<div class=\"article\" id=\"article$i\">\n".
+	get_onoff_button().
+	"<p>$meaning</p>\n </div>";
+
+}
+
+//메잌 센스 함수: 내용을 넣고 박스를 만들라고 해라.
 
 function get_valid_file() {
     if(isset($_GET['word'])){
@@ -109,12 +129,34 @@ $filename = get_valid_file();
 				
 				    <div class="move" id="add">+</div>
 				    
-				
-					<h2 id="word">
-					<?php
-                        print_word();
-                    ?>
-                    </h2>
+					<div id="word">
+						<h2>
+						<?php
+	                        print_word();
+	                    ?>
+	                    </h2>
+
+	                    <?php
+	                    if(isset($_GET['word'])) {
+
+	                    ?>
+
+	                    <a href="update_word.php?word=<?=$_GET['word']?>">수정하기</a>
+	                   	<form action="delete_process.php" method="get">
+	                   		<input type="hidden" name="word_name" value="<?=$_GET['word']?>">
+	                   		<input type="submit" value="삭제하기">
+	                   	</form>
+	                    <?php
+	                    }
+	                    ?>
+
+
+					</div>
+					
+
+                    
+
+
                     
                     
                     <?php
@@ -123,13 +165,10 @@ $filename = get_valid_file();
                     print_meaning(check_and_get_meaning($filename));
                     
                     ?>
+
+
                         
-                        <div>
-                            <input type="radio" id="off" name="on_off" value="off">
-                            <label for="off">끄기</label>
-                            <input type="radio" id="on" name="on_off" value="on">
-                            <label for="on">켜기</label>
-                        </div>
+                    <?php echo (get_onoff_button()); ?>
 					
 				</div>
 
