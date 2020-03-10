@@ -26,7 +26,7 @@
 
                         
                     
-                    <form action="update_word_process.php" method="get">
+                    <form action="update_word_process.php" method="post">
                         
                         <input type="hidden" name="old_name" value="<?=$_GET['word']?>">
                         <p>

@@ -142,7 +142,7 @@ $filename = get_valid_file();
 	                    ?>
 
 	                    <a href="update_word.php?word=<?=$_GET['word']?>">수정하기</a>
-	                   	<form action="delete_process.php" method="get">
+	                   	<form action="delete_process.php" method="post">
 	                   		<input type="hidden" name="word_name" value="<?=$_GET['word']?>">
 	                   		<input type="submit" value="삭제하기">
 	                   	</form>

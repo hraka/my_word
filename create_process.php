@@ -1,4 +1,4 @@
 <?php
-file_put_contents('data/'.$_GET['word_name'], '+'.$_GET['meaning']);
-header('Location: /index.php?word='.$_GET['word_name']);
+file_put_contents('data/'.$_POST['word_name'], '+'.$_POST['meaning']);
+header('Location: /index.php?word='.$_POST['word_name']);
 ?>

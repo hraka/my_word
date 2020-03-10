@@ -1,6 +1,6 @@
 <?php
 
-unlink('data/'.$_GET['word_name']);
+unlink('data/'.$_POST['word_name']);
 header('Location: /index.php');
 
 ?>
