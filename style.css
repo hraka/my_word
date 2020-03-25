@@ -1,4 +1,4 @@
-p, input, ul {
+p, ul {
 	padding:10px;
 }
 
@@ -132,4 +132,17 @@ h1 {
     left: 40px;
     bottom: 5px;
     
+}
+
+.btn {
+	display:inline;
+	color:green;
+	background-color: inherit;
+	border: 0;
+	-webkit-appearance: none;
+	font-family: inherit;
+	font-size: inherit;
+	font-style: italic;
+	padding: 0 6px;
+	cursor: pointer;
 }
