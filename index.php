@@ -26,12 +26,22 @@ function print_filelink_list(){
 
 function get_onoff_button(){
 	return "
-	<div>
+	<div class='on_off'>
 		<input type=\"radio\" id=\"off\" name=\"on_off\" value=\"off\">
 		<label for=\"off\">끄기</label>
 		<input type=\"radio\" id=\"on\" name=\"on_off\" value=\"on\">
 		<label for=\"on\">켜기</label>
 	</div>";
+}
+
+function get_meaning_update_button($i, $meaning){
+	return "
+	<form action=\"update_meaning.php\" method=\"post\" class=\"btn\">
+   		<input type=\"hidden\" name=\"word_name\" value=\"".$_GET['word']."\">
+   		<input type=\"hidden\" name=\"meaning_num\" value=\"".$i."\">
+   		<input type=\"hidden\" name=\"old_meaning\" value=\"".$meaning."\">
+   		<input type=\"submit\" value=\"수정하기\" class=\"btn\">
+   	</form>";
 }
 
 function print_meaning($meaning_explode){
@@ -40,7 +50,7 @@ function print_meaning($meaning_explode){
         $i = 0;
         while($i < count($meaning_explode)) {                            
             if(trim($meaning_explode[$i]) != "") {
-                make_card($meaning_explode[$i]);
+                make_card($meaning_explode[$i], $i);
             }
             $i = $i + 1;
         }
@@ -50,9 +60,10 @@ function print_meaning($meaning_explode){
 
 }
 
-function make_card($meaning){
+function make_card($meaning, $i){
 	echo "<div class=\"article\" id=\"article$i\">\n".
 	get_onoff_button().
+	get_meaning_update_button($i, $meaning).
 	"<p>$meaning</p>\n </div>";
 
 }
@@ -63,7 +74,6 @@ function get_valid_file() {
     if(isset($_GET['word'])){
         return "./data/".$_GET['word'];
     } else {
-    	echo "단어가 선택되지 않았음";
         return null;
     }
 }
@@ -74,7 +84,6 @@ function get_meaning_list_from_file($filename){
     $contents = fread($opfile, filesize($filename));
     $meaning_explode = explode("+", $contents);
     fclose($opfile);
-    echo "되었는가?";    
     return $meaning_explode;
 
 }
@@ -122,8 +131,7 @@ $filename = get_valid_file();
                         ?>
 					</ul>
 					
-					<input type="button" name="만들기" value="만들기" onclick = "location.href = 'create.html'">
-					업데이트
+					<input type="button" class="btn" name="만들기" value="만들기" onclick = "location.href = 'create.html'">
 				</div>
 				<div id="set">
 				
@@ -141,20 +149,31 @@ $filename = get_valid_file();
 
 	                    ?>
 
-	                    <a href="update_word.php?word=<?=$_GET['word']?>">수정하기</a>
-	                   	<form action="delete_process.php" method="post">
+	                    <a href="update_word.php?word=<?=$_GET['word']?>" class="btn">수정하기</a>
+	                   	<form action="delete_process.php" method="post" class="btn">
 	                   		<input type="hidden" name="word_name" value="<?=$_GET['word']?>">
-	                   		<input type="submit" value="삭제하기">
+	                   		<input type="submit" value="삭제하기" class="btn">
 	                   	</form>
+	                
 	                    <?php
 	                    }
 	                    ?>
 
-
 					</div>
-					
 
-                    
+
+					<?php
+					if(isset($_GET['word'])) {
+					?>
+
+						<form action="create_meaning.php" method="post" class="btn">
+	                   		<input type="hidden" name="word_name" value="<?=$_GET['word']?>">
+	                   		<input type="submit" value="뜻만들기" class="btn">
+	                   	</form>
+
+					<?php
+					}
+					?>
 
 
                     
