@@ -14,7 +14,7 @@
 			<h1><a href="index.php">메인 메뉴 관련 내용 작게</a></h1>
 			
 			
-			<div id="content">
+			<div>
 
 				<div id="set">
 				

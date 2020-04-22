@@ -36,7 +36,7 @@
                         </p>
 
                         <p>	
-                        	<input type="submit">
+                        	<input type="submit" value="수정하기">
                         </p>
                     </form>
 

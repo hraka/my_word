@@ -27,16 +27,18 @@ function print_filelink_list(){
 function get_onoff_button(){
 	return "
 	<div class='on_off'>
-		<input type=\"radio\" id=\"off\" name=\"on_off\" value=\"off\">
-		<label for=\"off\">끄기</label>
-		<input type=\"radio\" id=\"on\" name=\"on_off\" value=\"on\">
-		<label for=\"on\">켜기</label>
+		<label class=\"switch\">
+			<!-- 내 세상으로 초대 -->
+			<input type=\"checkbox\">
+			<span class=\"slider round\"></span>
+		
+		</label>
 	</div>";
 }
 
 function get_meaning_update_button($i, $meaning){
 	return "
-	<form action=\"update_meaning.php\" method=\"post\" class=\"btn\">
+	<form action=\"update_meaning.php\" method=\"post\" class=\"btn right\">
    		<input type=\"hidden\" name=\"word_name\" value=\"".$_GET['word']."\">
    		<input type=\"hidden\" name=\"meaning_num\" value=\"".$i."\">
    		<input type=\"hidden\" name=\"old_meaning\" value=\"".$meaning."\">
@@ -63,8 +65,9 @@ function print_meaning($meaning_explode){
 function make_card($meaning, $i){
 	echo "<div class=\"article\" id=\"article$i\">\n".
 	get_onoff_button().
+	"<p>$meaning</p>\n".
 	get_meaning_update_button($i, $meaning).
-	"<p>$meaning</p>\n </div>";
+	"</div>";
 
 }
 
@@ -104,6 +107,13 @@ function check_and_get_meaning($filename){
     }
 }
 
+function print_btn_of_new_meaning() {
+	return "<form action=\"create_meaning.php\" method=\"post\" class=\"btn\">
+       		<input type=\"hidden\" name=\"word_name\" value=\"".$_GET['word']."\">
+       		<input type=\"submit\" value=\"뜻만들기\" class=\"btn\">
+       	</form>";
+}
+
 $filename = get_valid_file(); 
 
 ?>
@@ -113,85 +123,83 @@ $filename = get_valid_file();
 		<title>언어 사전</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="switch.css">
 		<link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo|Noto+Sans+KR&display=swap" rel="stylesheet">
+
+	
 	</head>
 
 	<body>
-		<div>
-		
+
+		<header>
 			<h1><a href="index.php">언어 사전</a></h1>
-			
-			
-			<div id="content">
-				<div id="categories">
-					<strong>카테고리</strong>
+		</header>
+		
+		
+		<div id="content">
+			<nav id="categories">
+				<label>카테고리
 					<ul>
                         <?php
                             print_filelink_list();
                         ?>
 					</ul>
-					
-					<input type="button" class="btn" name="만들기" value="만들기" onclick = "location.href = 'create.html'">
-				</div>
-				<div id="set">
-				
-				    <div class="move" id="add">+</div>
-				    
-					<div id="word">
-						<h2>
-						<?php
-	                        print_word();
-	                    ?>
-	                    </h2>
-
-	                    <?php
-	                    if(isset($_GET['word'])) {
-
-	                    ?>
-
-	                    <a href="update_word.php?word=<?=$_GET['word']?>" class="btn">수정하기</a>
-	                   	<form action="delete_process.php" method="post" class="btn">
-	                   		<input type="hidden" name="word_name" value="<?=$_GET['word']?>">
-	                   		<input type="submit" value="삭제하기" class="btn">
-	                   	</form>
-	                
-	                    <?php
-	                    }
-	                    ?>
-
-					</div>
-
-
+				</label>
+				<input type="button" class="btn" name="만들기" value="만들기" onclick = "location.href = 'create.html'">
+			</nav>
+			<div id="set">
+			
+			    <div class="move" id="add">+</div>
+			    
+				<div id="word">
+					<h2>
 					<?php
-					if(isset($_GET['word'])) {
-					?>
+                        print_word();
+                    ?>
+                    </h2>
 
-						<form action="create_meaning.php" method="post" class="btn">
-	                   		<input type="hidden" name="word_name" value="<?=$_GET['word']?>">
-	                   		<input type="submit" value="뜻만들기" class="btn">
-	                   	</form>
-
-					<?php
-					}
-					?>
-
-
-                    
-                    
                     <?php
-                    
-                    
-                    print_meaning(check_and_get_meaning($filename));
-                    
+                    if(isset($_GET['word'])) {
+
                     ?>
 
+                    <a href="update_word.php?word=<?=$_GET['word']?>" class="btn">수정하기</a>
+                   	<form action="delete_process.php" method="post" class="btn">
+                   		<input type="hidden" name="word_name" value="<?=$_GET['word']?>">
+                   		<input type="submit" value="삭제하기" class="btn">
+                   	</form>
+                
+                    <?php
+                    }
+                    ?>
 
-                        
-                    <?php echo (get_onoff_button()); ?>
-					
 				</div>
 
+
+				<?php
+				if(isset($_GET['word'])) {
+
+					echo(print_btn_of_new_meaning());
+					
+				}
+				?>
+
+
+                
+                
+                <?php
+                
+                
+                print_meaning(check_and_get_meaning($filename));
+                
+                ?>
+
+
+                    
+                <?php echo (get_onoff_button()); ?>
+				
 			</div>
+
 		</div>
 
 	</body>
