@@ -30,7 +30,7 @@
                     
                     <form action="create_meaning_process.php" method="post">
                         <p>
-                        	<input type="hidden" name="word_name" value="<?=$_POST['word_name']?>">
+                        	<input type="hidden" name="word_id" value="<?=$_POST['word_id']?>">
                         	<textarea name="meaning" placeholder="새로운 뜻"></textarea>
                         </p>
 
