@@ -30,8 +30,7 @@
                     
                     <form action="update_meaning_process.php" method="post">
                         <p>
-                        	<input type="hidden" name="word_name" value="<?=$_POST['word_name']?>">
-                        	<input type="hidden" name="meaning_num" value="<?=$_POST['meaning_num']?>">
+                        	<input type="hidden" name="meaning_id" value="<?=$_POST['meaning_id']?>">
                         	<textarea name="new_meaning"> <?php echo $_POST['old_meaning']?> </textarea>
                         </p>
 

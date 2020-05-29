@@ -1,4 +1,29 @@
 
+<?php
+$conn = mysqli_connect(
+	'localhost',
+	'root', 
+	'1111', 
+	'words');
+
+
+
+
+$sql = "SELECT * FROM word WHERE id={$_POST['word_id']};";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_array($result);
+
+print_r($row);
+
+
+$filtered = array(
+	'word_name' => htmlspecialchars($row['word_name']),
+	'profile' => htmlspecialchars($row['profile'])
+);
+
+print_r($filtered);
+
+?> 
 <!doctype html>
 <html>
 	<head>
@@ -24,21 +49,25 @@
                         수정
                     </h2>
 
+
+
                         
                     
                     <form action="update_word_process.php" method="post">
-                        
-                        <input type="hidden" name="old_name" value="<?=$_GET['word']?>">
+                       
                         <p>
- 	                       <input type="text" name="word_name" placeholder="단어" value="<?php echo $_GET['word']?>">
-
+ 	                       <input type="text" name="word_name" placeholder="단어" value="<?=$filtered['word_name']?>">
+ 	                       <input type="hidden" name="word_id" placeholder="단어" value="<?=$_POST['word_id']?>">
+                     	</p>
+                     	<p>
+                        	<textarea name="profile"> <?=$filtered['profile']?>	</textarea>
                         </p>
 
 
 
 
                         <p>	
-                        	<input type="submit">
+                        	<input type="submit" value="수정하기">
                         </p>
                     </form>
 
@@ -50,13 +79,7 @@
 		</div>
 
 	</body>
-	
-	<?php
-    
-
-    ?>
 
 </html>
-
 
 
