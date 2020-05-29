@@ -1,122 +1,73 @@
 <?php
+$conn = mysqli_connect(
+	'localhost',
+	'root', 
+	'1111', 
+	'words');
 
-function print_word(){
-    if(isset($_GET['word'])) {
-        echo ($_GET['word']);
-    } else {
-        echo "단어사전 입니다";
-    }
+
+$sql = "SELECT * FROM word LIMIT 1000";
+$result = mysqli_query($conn, $sql);
+
+$list = '';
+while($row = mysqli_fetch_array($result)) {
+	$escaped_title = htmlspecialchars($row['word_name']); //목록에 들어갈 단어명
+	$list = $list."<li><a href=\"index.php?word={$row['id']}\">{$escaped_title}</a></li>"; //단어 id를 GET으로 취하는 url 연결
 }
 
-function print_filelink_list(){
-    $list = scandir('./data');
-    
-    $i = 0;
-    while($i < count($list)){
+$word_info = array(
+	'word_name' => 'Welcome',
+	'profile' => 'Hello, This is your Dictionary');
 
-        if($list[$i] != '.' ) {
-            if($list[$i] != '..') {
-                echo "<li><a href=\"index.php?word=$list[$i]\">$list[$i]</a></li>\n";
-            }
-        }                            
-        $i = $i + 1; 
-    }
-}
+$printing_meanings = '';
+//$meanings = array();
 
 
-function get_onoff_button(){
-	return "
-	<div class='on_off'>
-		<label class=\"switch\">
-			<!-- 내 세상으로 초대 -->
-			<input type=\"checkbox\">
-			<span class=\"slider round\"></span>
-		
-		</label>
-	</div>";
-}
+if(isset($_GET['word'])) { //word id를 받는다.
+	$filtered_word_id = mysqli_real_escape_string($conn, $_GET['word']);
+	$sql = "SELECT * FROM word WHERE id=\"{$filtered_word_id}\"";
+	$result = mysqli_query($conn, $sql);
 
-function get_meaning_update_button($i, $meaning){
-	return "
-	<form action=\"update_meaning.php\" method=\"post\" class=\"btn right\">
-   		<input type=\"hidden\" name=\"word_name\" value=\"".$_GET['word']."\">
-   		<input type=\"hidden\" name=\"meaning_num\" value=\"".$i."\">
-   		<input type=\"hidden\" name=\"old_meaning\" value=\"".$meaning."\">
-   		<input type=\"submit\" value=\"수정하기\" class=\"btn\">
-   	</form>";
-}
+	$row = mysqli_fetch_array($result);
+	
+	$word_info['word_name'] = htmlspecialchars($row['word_name']);
+	$word_info['profile'] = htmlspecialchars($row['profile']);
 
-function print_meaning($meaning_explode){
-    if(isset($meaning_explode)) {
 
-        $i = 0;
-        while($i < count($meaning_explode)) {                            
-            if(trim($meaning_explode[$i]) != "") {
-                make_card($meaning_explode[$i], $i);
-            }
-            $i = $i + 1;
-        }
-    } else {
-        echo "단어를 눌러주세요";
-    }
+	$sql = "SELECT * FROM meaning WHERE word_id={$filtered_word_id}";
+	$result = mysqli_query($conn, $sql);
 
-}
+	while($row = mysqli_fetch_array($result)) {
 
-function make_card($meaning, $i){
-	echo "<div class=\"article\" id=\"article$i\">\n".
-	get_onoff_button().
-	"<p>$meaning</p>\n".
-	get_meaning_update_button($i, $meaning).
-	"</div>";
+	
+		$escaped_meaning = htmlspecialchars($row['meaning']);
+		$escaped_meaning_id = htmlspecialchars($row['id']);
+
+
+		$printing_meanings = $printing_meanings."
+			<article>
+
+				<form action=\"update_meaning.php\" method=\"post\" class=\"btn\">
+					<input type=\"hidden\" name=\"meaning_id\" value=\"{$escaped_meaning_id}\">
+					<input type=\"hidden\" name=\"old_meaning\" value=\"{$escaped_meaning}\">
+					<input type=\"hidden\" name=\"word_name\" value=\"{$word_info['word_name']}\">
+					<input type=\"submit\" value=\"수정하기\" class=\"btn right\">
+				</form>
+					{$escaped_meaning}
+			</article>
+		";
+	}
+
 
 }
 
-//메잌 센스 함수: 내용을 넣고 박스를 만들라고 해라.
 
-function get_valid_file() {
-    if(isset($_GET['word'])){
-        return "./data/".$_GET['word'];
-    } else {
-        return null;
-    }
-}
-
-
-function get_meaning_list_from_file($filename){
-    $opfile = fopen($filename, 'r');
-    $contents = fread($opfile, filesize($filename));
-    $meaning_explode = explode("+", $contents);
-    fclose($opfile);
-    return $meaning_explode;
-
-}
-
-function check_and_get_meaning($filename){
-    if (file_exists($filename)) {
-        if (is_readable($filename)) {
-
-            return get_meaning_list_from_file($filename);
-
-        } else {
-            echo "읽을 수 없어요";
-            return null;
-        }
-    } else {
-        echo "없군요";
-        return null;
-    }
-}
-
-function print_btn_of_new_meaning() {
-	return "<form action=\"create_meaning.php\" method=\"post\" class=\"btn\">
-       		<input type=\"hidden\" name=\"word_name\" value=\"".$_GET['word']."\">
-       		<input type=\"submit\" value=\"뜻만들기\" class=\"btn\">
-       	</form>";
-}
-
-$filename = get_valid_file(); 
 
 ?>
+
+
+
+
 <!doctype html>
 <html>
 	<head>
@@ -140,76 +91,69 @@ $filename = get_valid_file();
 			<nav id="categories">
 				<label>카테고리
 					<ul>
-                        <?php
-                            print_filelink_list();
-                        ?>
+
+						<?=$list?>
+
 					</ul>
 				</label>
 				<input type="button" class="btn" name="만들기" value="만들기" onclick = "location.href = 'create.html'">
 			</nav>
 			<div id="set">
-			
-			    <div class="move" id="add">+</div>
-			    
+						    
 				<div id="word">
 					<h2>
-					<?php
-                        print_word();
-                    ?>
+	 					<?=$word_info['word_name']?> 
                     </h2>
 
+                    <strong>                    	
+                    	<?=$word_info['profile']?>
+                    </strong>
+
                     <?php
-                    if(isset($_GET['word'])) {
+                    if(isset($_GET['word'])){
+                    	?>
+              
 
-                    ?>
+                    <div class="right"> 
+	                   	<form action="update_word.php" method="post" class="btn">
+	                   		<input type="hidden" name="word_id" value="<?=$filtered_word_id?>">
+	                   		<input type="hidden" name="word_name" value="<?=$word_info['word_name']?>">
+	                   		<input type="submit" value="수정하기" class="btn">
+	                   	</form>
+	                   	<form action="delete_process.php" method="post" class="btn">
+	                   		<input type="hidden" name="word_id" value="<?=$filtered_word_id?>">
+	                   		<input type="hidden" name="word_name" value="<?=$word_info['word_name']?>">
+	                   		<input type="submit" value="삭제하기" class="btn">
+	                   	</form>
+	                </div>
 
-                    <a href="update_word.php?word=<?=$_GET['word']?>" class="btn">수정하기</a>
-                   	<form action="delete_process.php" method="post" class="btn">
-                   		<input type="hidden" name="word_name" value="<?=$_GET['word']?>">
-                   		<input type="submit" value="삭제하기" class="btn">
-                   	</form>
-                
-                    <?php
-                    }
-                    ?>
+                </div>
 
-				</div>
-
-
-				<?php
-				if(isset($_GET['word'])) {
-
-					echo(print_btn_of_new_meaning());
-					
-				}
-				?>
-
-
-                
-                
-                <?php
-                
-                
-                print_meaning(check_and_get_meaning($filename));
-                
-                ?>
+				<form action="create_meaning.php" method="post" class="btn">
+	           		<input type="hidden" name="word_id" value="<?=$filtered_word_id?>">
+	           		<input type="hidden" name="word_name" value="<?=$word_info['word_name']?>">
+	           		<input type="submit" value="만들기" class="btn">
+	           	</form>
 
 
-                    
-                <?php echo (get_onoff_button()); ?>
-				
+                   	<?php
+                   } else {
+                   	?>
+
+               	</div>
+                   
+                   <?php
+               		}
+                   ?>
+
+                   <?=$printing_meanings?>
+
+
 			</div>
 
 		</div>
 
 	</body>
 	
-	<?php
-    
 
-    ?>
-
-</html>
-
-
-
+</html> 
