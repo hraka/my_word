@@ -11,8 +11,7 @@ p {
 ul {
 	font-style:italic;
 	color:red;
-    font-family: 'Noto Sans KR';
-
+	font-family: 'Noto Sans KR';
 }
 
 a{
@@ -25,6 +24,7 @@ body {
 	padding:8%;
 	padding-top:44px;
     font-family: 'Nanum Myeongjo';
+
 /*	background-color:#fee464;*/
 /*
     background-image:
@@ -47,7 +47,7 @@ h1 {
 	margin:0;
 	display:block;
 	text-align: center;
-    font-family: 'Noto Sans KR';
+    /*font-family: 'Noto Sans KR';*/
 }
 
 #word {
@@ -87,7 +87,10 @@ h1 {
     
 }
 
-.article {
+article {
+
+	font-family: 'Noto Sans KR';
+
 
 	background-color:white;
 	padding:100px;
@@ -95,6 +98,8 @@ h1 {
 	padding-bottom:52px;
 	border-radius:90px;
 	margin:20px;
+
+	min-height: 50px;
 
 /*				 공책 줄무늬
 */				
@@ -158,10 +163,14 @@ textarea {
 }
 
 
-.article p {
+article p {
 	padding-left: 50px;
 }
 
 .right {
-	float:right;
+	text-align: right;
+}
+
+.bottom_of_meaning {
+	margin-top: 20px;
 }
