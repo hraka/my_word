@@ -6,15 +6,9 @@ $conn = mysqli_connect(
 	'1111', 
 	'words');
 
-
-
-
 $sql = "SELECT * FROM word WHERE id={$_POST['word_id']};";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_array($result);
-
-print_r($row);
-
 
 $filtered = array(
 	'word_name' => htmlspecialchars($row['word_name']),
