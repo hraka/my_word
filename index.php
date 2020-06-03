@@ -38,7 +38,7 @@ if(isset($_GET['word'])) { //word id를 받는다.
 	while($row = mysqli_fetch_array($result)) {
 
 	
-		$escaped_meaning = htmlspecialchars($row['meaning']);
+		$escaped_meaning = nl2br(htmlspecialchars($row['meaning']));
 		$escaped_meaning_id = htmlspecialchars($row['id']);
 		$escaped_time = htmlspecialchars($row['created']);
 
@@ -54,6 +54,12 @@ if(isset($_GET['word'])) { //word id를 받는다.
 						<input type=\"hidden\" name=\"old_meaning\" value=\"{$escaped_meaning}\">
 						<input type=\"hidden\" name=\"word_name\" value=\"{$word_info['word_name']}\">
 						<input type=\"submit\" value=\"수정하기\" class=\"btn\">
+					</form>
+
+					<form action=\"delete_meaning_process.php\" method=\"post\" class=\"btn\">
+						<input type=\"hidden\" name=\"meaning_id\" value=\"{$escaped_meaning_id}\">
+						<input type=\"hidden\" name=\"word_id\" value=\"{$filtered_word_id}\">
+						<input type=\"submit\" value=\"삭제하기\" class=\"btn\">
 					</form>
 				</div>
 			</article>
@@ -77,7 +83,7 @@ if(isset($_GET['word'])) { //word id를 받는다.
 		</header>	
 		<div id="content">
 			<nav id="categories">
-				<label>카테고리
+				<label><strong>카테고리</strong>
 					<ul>
 						<?=$list?>
 					</ul>
@@ -121,7 +127,7 @@ if(isset($_GET['word'])) { //word id를 받는다.
                    <?php
                		}
                    ?>
-                   <?=nl2br($printing_meanings)?>
+                   <?=$printing_meanings?>
 			</div>
 		</div>
 	</body>
