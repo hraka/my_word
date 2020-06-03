@@ -2,9 +2,6 @@ p, ul {
 	padding:10px;
 }
 
-p {
-	text-indent:4%;
-}
 
 
 
@@ -163,9 +160,17 @@ textarea {
 }
 
 
+
+
 article p {
 	padding-left: 50px;
+	text-indent:4%;
+
 }
+
+/*lable {
+	font-weight: bold;
+}*/
 
 .right {
 	text-align: right;
@@ -174,3 +179,4 @@ article p {
 .bottom_of_meaning {
 	margin-top: 20px;
 }
+

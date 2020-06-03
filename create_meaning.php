@@ -34,6 +34,14 @@
                         	<textarea name="meaning" placeholder="새로운 뜻"></textarea>
                         </p>
 
+                        
+                        
+                        <p>
+                        	<label> 출처: 
+                        		<input type="text" name="source">
+                    		</label>
+                        </p>
+
                         <p>	
                         	<input type="submit">
                         </p>
