@@ -22,25 +22,28 @@ $word_info = array(
 $printing_meanings = '';
 
 if(isset($_GET['word'])) { //word id를 받는다.
-	$filtered_word_id = mysqli_real_escape_string($conn, $_GET['word']);
-	$sql = "SELECT * FROM word WHERE id=\"{$filtered_word_id}\"";
-	$result = mysqli_query($conn, $sql);
+	$filtered_word_id = mysqli_real_escape_string($conn, $_GET['word']); //word_info와 통합시킬까?ㄴ
+	$sql_word = "SELECT * FROM word WHERE id=\"{$filtered_word_id}\"";
+	$result_word = mysqli_query($conn, $sql_word);
 
-	$row = mysqli_fetch_array($result);
+	$row_word = mysqli_fetch_array($result_word);
 	
-	$word_info['word_name'] = htmlspecialchars($row['word_name']);
-	$word_info['profile'] = htmlspecialchars($row['profile']);
+	$word_info['word_name'] = htmlspecialchars($row_word['word_name']);
+	$word_info['profile'] = htmlspecialchars($row_word['profile']);
 
 
-	$sql = "SELECT * FROM meaning WHERE word_id={$filtered_word_id}";
-	$result = mysqli_query($conn, $sql);
+//	$sql_synonym = "SELECT * FROM relation_synonym WHERE sub_id =\"{$filtered_word_id}\"";
 
-	while($row = mysqli_fetch_array($result)) {
+
+	$sql_meaning = "SELECT * FROM meaning WHERE word_id={$filtered_word_id}";
+	$result_meaning = mysqli_query($conn, $sql_meaning);
+
+	while($row_meaning = mysqli_fetch_array($result_meaning)) {
 
 	
-		$escaped_meaning = nl2br(htmlspecialchars($row['meaning']));
-		$escaped_meaning_id = htmlspecialchars($row['id']);
-		$escaped_time = htmlspecialchars($row['created']);
+		$escaped_meaning = nl2br(htmlspecialchars($row_meaning['meaning']));
+		$escaped_meaning_id = htmlspecialchars($row_meaning['id']);
+		$escaped_time = htmlspecialchars($row_meaning['created']);
 
 
 		$printing_meanings = $printing_meanings."
