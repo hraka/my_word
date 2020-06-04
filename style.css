@@ -47,6 +47,10 @@ h1 {
     /*font-family: 'Noto Sans KR';*/
 }
 
+h2 {
+	text-indent: 14px;
+}
+
 #word {
 	border: 3px powderblue solid;
 	border-radius: 44px;
@@ -88,6 +92,7 @@ article {
 
 	font-family: 'Noto Sans KR';
 
+	border: 1px solid gray;
 
 	background-color:white;
 	padding:100px;
@@ -96,6 +101,7 @@ article {
 	border-radius:90px;
 	margin:20px;
 
+	box-sizing: border-box;
 	min-height: 50px;
 
 /*				 공책 줄무늬
@@ -151,12 +157,19 @@ article {
 
 input[type="text"], textarea {
 	font-size: 1.5rem;
-	width: 1100px;
+	width: 100%;
 	padding: 20px;
+		box-sizing: border-box;
+
 }
 
 textarea {
 	height: 200px;
+}
+
+.relation {
+	display: grid;
+	grid-template-columns: auto 90%;
 }
 
 

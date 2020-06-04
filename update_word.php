@@ -15,8 +15,6 @@ $filtered = array(
 	'profile' => htmlspecialchars($row['profile'])
 );
 
-print_r($filtered);
-
 ?> 
 <!doctype html>
 <html>
@@ -33,7 +31,7 @@ print_r($filtered);
 			<h1><a href="index.php">메인 메뉴 관련 내용 작게</a></h1>
 			
 			
-			<div id="content">
+			<div>
 
 				<div id="set">
 				
@@ -54,10 +52,19 @@ print_r($filtered);
  	                       <input type="hidden" name="word_id" placeholder="단어" value="<?=$_POST['word_id']?>">
                      	</p>
                      	<p>
-                        	<textarea name="profile"> <?=$filtered['profile']?>	</textarea>
+                        	<textarea name="profile" placeholder="설명"><?=$filtered['profile']?></textarea>
                         </p>
 
-
+                        <p class="relation">
+                        	<label for="synonym"> 유의어 </label>
+                        		<input type="text" name="synonym" id="synonym">
+                        	
+                        </p>
+                        <p class="relation">
+                        	<label for="antonym"> 반의어 </label>
+                        		<input type="text" name="antonym" id="antonym">
+                        	
+                        </p>
 
 
                         <p>	
