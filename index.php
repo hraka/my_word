@@ -20,20 +20,26 @@ while($row_category_list = mysqli_fetch_array($result_category_list)) {
 	$category_list = $category_list."<li><a href=\"index.php?category={$row_category_list['id']}\">{$escaped_category}</a></li>";
 }
 
-$sql_word_list = "SELECT id, word_name FROM word LIMIT 1000";
+$sql_word_list = "SELECT id, word_name FROM word ORDER BY word_name LIMIT 1000";
 $filtered_category_id = 0;
 
+$selected_category = '';
 if(isset($_GET['category']) && $_GET['category'] > 0) {
 	$filtered_category_id = mysqli_real_escape_string($conn, $_GET['category']);
-	$sql_word_list = "SELECT id, word_name FROM categorizing LEFT JOIN word ON categorizing.word_id = word.id WHERE category_id ={$filtered_category_id}"; //*보다 word_name 으로 컬럼명 특정하는게 나을까? 어차피 category_id를 색인하느라 여러 컬럼을 다 읽는 거 아닐까? 가져오는 건 또 다른가? 어디에 쓰는 것도 아닌데도? fetch과정에서 다른가? result에 들어가는 field count 값이 다르다.
+	$sql_word_list = "SELECT id, word_name FROM categorizing LEFT JOIN word ON categorizing.word_id = word.id WHERE category_id ={$filtered_category_id} ORDER BY word_name"; //*보다 word_name 으로 컬럼명 특정하는게 나을까? 어차피 category_id를 색인하느라 여러 컬럼을 다 읽는 거 아닐까? 가져오는 건 또 다른가? 어디에 쓰는 것도 아닌데도? fetch과정에서 다른가? result에 들어가는 field count 값이 다르다.
+
+	$sql_category = "SELECT * FROM category WHERE id = {$filtered_category_id}";
+	$result_category = mysqli_query($conn, $sql_category);
+	$row_category = mysqli_fetch_array($result_category);
+	$selected_category = ': '.htmlspecialchars($row_category['category_name']);
 }
 
 $result_word_list = mysqli_query($conn, $sql_word_list);
 
 $list = '';
 while($row_word_list = mysqli_fetch_array($result_word_list)) {
-	$escaped_title = htmlspecialchars($row_word_list['word_name']); //목록에 들어갈 단어명
-	$list = $list."<li><a href=\"index.php?category={$filtered_category_id}&word={$row_word_list['id']}\">{$escaped_title}</a></li>"; //단어 id를 GET으로 취하는 url 연결
+	$escaped_title = htmlspecialchars($row_word_list['word_name']);
+	$list = $list."<li><a href=\"index.php?category={$filtered_category_id}&word={$row_word_list['id']}\">{$escaped_title}</a></li>";
 }
 
 
@@ -54,7 +60,7 @@ if(isset($_GET['word'])) { //word id를 받는다.
 //	$sql_synonym = "SELECT * FROM relation_synonym WHERE sub_id =\"{$filtered_word_id}\"";
 
 
-	$sql_meaning = "SELECT * FROM meaning WHERE word_id={$filtered_word_id}";
+	$sql_meaning = "SELECT * FROM meaning WHERE word_id={$filtered_word_id} ORDER BY created DESC";
 	$result_meaning = mysqli_query($conn, $sql_meaning);
 
 	while($row_meaning = mysqli_fetch_array($result_meaning)) {
@@ -63,26 +69,43 @@ if(isset($_GET['word'])) { //word id를 받는다.
 		$escaped_meaning = nl2br(htmlspecialchars($row_meaning['meaning']));
 		$escaped_meaning_id = htmlspecialchars($row_meaning['id']);
 		$escaped_time = htmlspecialchars($row_meaning['created']);
+		$escaped_source = '';
+		if($row_meaning['source'] !== NULL) {
+			$escaped_source = '출처 : '.htmlspecialchars($row_meaning['source']);
+		}
 
 
 		$printing_meanings = $printing_meanings."
 			<article>
-				{$escaped_meaning}
+
+				<div class='on_off'>
+					<label class=\"switch\">
+						<!-- 내 세상으로 초대 -->
+						<input type=\"checkbox\">
+						<span class=\"slider round\"></span>
+					</label>
+				</div>
+
+				<div class=\"middle_of_meaning\">
+					{$escaped_meaning}
+				</div>
 
 				<div class=\"bottom_of_meaning right\">
+					<div class=\"source\"><a class=\"source\" href=\"{$escaped_source}\">{$escaped_source}</a></div>
 					{$escaped_time}
-					<form action=\"update_meaning.php\" method=\"post\" class=\"btn\">
-						<input type=\"hidden\" name=\"meaning_id\" value=\"{$escaped_meaning_id}\">
-						<input type=\"hidden\" name=\"old_meaning\" value=\"{$escaped_meaning}\">
-						<input type=\"hidden\" name=\"word_name\" value=\"{$word_info['word_name']}\">
-						<input type=\"submit\" value=\"수정하기\" class=\"btn\">
-					</form>
+							<span> <form action=\"update_meaning.php\" method=\"post\" class=\"btn\">
+								<input type=\"hidden\" name=\"meaning_id\" value=\"{$escaped_meaning_id}\">
+								<input type=\"hidden\" name=\"old_meaning\" value=\"{$escaped_meaning}\">
+								<input type=\"hidden\" name=\"word_name\" value=\"{$word_info['word_name']}\">
+								<input type=\"submit\" value=\"수정하기\" class=\"btn\">
+							</form>
 
-					<form action=\"delete_meaning_process.php\" method=\"post\" class=\"btn\">
-						<input type=\"hidden\" name=\"meaning_id\" value=\"{$escaped_meaning_id}\">
-						<input type=\"hidden\" name=\"word_id\" value=\"{$filtered_word_id}\">
-						<input type=\"submit\" value=\"삭제하기\" class=\"btn\">
-					</form>
+							<form action=\"delete_meaning_process.php\" method=\"post\" class=\"btn\">
+								<input type=\"hidden\" name=\"meaning_id\" value=\"{$escaped_meaning_id}\">
+								<input type=\"hidden\" name=\"word_id\" value=\"{$filtered_word_id}\">
+								<input type=\"submit\" value=\"삭제하기\" class=\"btn\">
+							</form>
+					</span>
 				</div>
 			</article>
 		";
@@ -95,18 +118,25 @@ if(isset($_GET['word'])) { //word id를 받는다.
 	<head>
 		<title>언어 사전</title>
 		<meta charset="utf-8">
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="style.css">	
 		<link rel="stylesheet" href="switch.css">
-		<link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo|Noto+Sans+KR&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo|Noto+Sans+KR&display=swap" >
+		<link rel="stylesheet" href="style_mobile.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body>
 		<header>
-			<h1><a href="index.php">언어 사전</a></h1>
+			<h1><a href="index.php">언어 사전 </a> <?=$selected_category?></h1>
 		</header>	
 		<div id="content">
 			<nav id="categories">
-				<label><strong>카테고리 <?=$category_list?></strong>
-					<ul>
+				<label><strong>카테고리</strong>
+					<ul class="category_list">
+						<?=$category_list?>
+					</ul>
+					<input type="button" class="btn" value="카테고리 만들기" onclick = "location.href = 'create_category.php'">
+
+					<ul class="word_list">
 						<?=$list?>
 					</ul>
 				</label>
