@@ -1,18 +1,5 @@
-p, input, ul {
+p, ul {
 	padding:10px;
-}
-
-p {
-	text-indent:4%;
-}
-
-
-
-ul {
-	font-style:italic;
-	color:red;
-    font-family: 'Noto Sans KR';
-
 }
 
 a{
@@ -25,6 +12,9 @@ body {
 	padding:8%;
 	padding-top:44px;
     font-family: 'Nanum Myeongjo';
+    font-size: 1.2rem;
+    line-height: 1.8rem;
+
 /*	background-color:#fee464;*/
 /*
     background-image:
@@ -34,7 +24,30 @@ body {
 
 }
 
-#categories {
+#content {
+	
+	display:grid;
+	grid-template-columns: 17% 90%/*1fr*/;
+
+}
+
+#set {
+	padding:5%;
+}
+
+
+.word_list {
+	color:red;
+	font-family: 'Noto Sans KR';
+}
+
+.category_list {
+	list-style: none;
+	font-weight: bold;
+}
+
+/* 카테고리와 단어 리스트 */
+#categories { 
 	border-right: #eb4 1px dotted;
 	margin:0;
 	padding-left:30px;
@@ -46,29 +59,136 @@ h1 {
 	padding:30px;
 	margin:0;
 	display:block;
-	font-size: 26px;
 	text-align: center;
-    font-family: 'Noto Sans KR';
+    /*font-family: 'Noto Sans KR';*/
 }
 
+h2 {
+	text-indent: 14px;
+}
+
+#word, article {
+	margin:2%;
+}
 #word {
-	border: 3px powderblue solid;
+	border: 1px powderblue solid;
 	border-radius: 44px;
-	padding: 50px;
-	padding-left:100px;
-	margin:20px;
-	margin-bottom:44px;
-}
+	padding: 5%;
+	padding-left:10%;
+	margin-bottom:4.4%;
 
-#content {
+	box-sizing: border-box;
+
+	box-shadow: 1px 3px 5px powderblue;
+}
+article {
+
+	font-family: 'Noto Sans KR';
+
+	border: 0px solid gray;
+
+	background-color:white;
+	padding-left:15%;
+	padding-right: 10%;
+	padding-top:8%;
+	padding-bottom:3%;
+	border-radius:90px;
+
+	box-sizing: border-box;
+
+/*				 공책 줄무늬
+*/				
+    background-color: #fff;
+	background-image:
+	linear-gradient(90deg, transparent 13%, #abced4 13%, #abced4 13.1%, transparent 13.1%),
+	linear-gradient(#eee .1em, transparent .1em);
+	background-size: 100% 1.5em;
+
+	box-shadow: 1px 1px 4px hsla(0, 0%, 0%, 0.2);
+
+    word-break: break-all;
+    /*    word-wrap: break-word; 을 적용하면 url의 경우 -다음에 긴 문자가 나올 시 사이 공백이 크게 들어가기도 한다.
+*/
+
+    }
+
+    .middle_of_meaning {
+    	min-height: 120px;
+    }
+
+    .bottom_of_meaning {
+		margin-top: 20px;
+		margin-bottom: 10px;
+	}
+
+	.source {
+		color: powderblue;
+		font-size:1rem;
+		text-align : left;
+
+	}
+
+
+   @media (max-width: 800px) {
+        .article {
+
+            background-color: #fff;
+            background-image:
+            linear-gradient(90deg, transparent 63px, #abced4 63px, #abced4 65px, transparent 65px),
+            linear-gradient(#eee .1rem, transparent .1rem);
+            background-size: 100% 1.2rem;
+            
+    }        
 	
-	display:grid;
-	grid-template-columns: 17% 1fr;
-
+	/*background-color: #eddc8a;
+	background-image: url("https://www.transparenttextures.com/patterns/exclusive-paper.png");
+	 This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
 
-#set {
-	padding:52px;
+.on_off {
+    text-align: right;
+    float: right;
+    position: relative;
+    left: 40px;
+    bottom: 5px;
+    
+}
+
+.btn {
+	display:inline;
+	color:green;
+	background-color: inherit;
+	border: 0;
+	-webkit-appearance: none;
+	font-family: inherit;
+	font-size: inherit;
+	font-style: italic;
+	padding: 0 6px;
+	cursor: pointer;
+}
+
+
+input[type="text"], textarea {
+	width: 100%;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+input[type="text"] {
+	font-size: 1.0rem;
+}
+
+textarea {
+	font-size: 1.5rem;
+}
+
+textarea {
+	height: 200px;
+}
+
+.relation {
+	display: grid;
+	grid-template-columns: auto 90%;
 }
 
 
@@ -88,48 +208,21 @@ h1 {
     
 }
 
-.article {
 
-	background-color:white;
-	padding:100px;
-	padding-top:30px;
-	padding-bottom:52px;
-	border-radius:90px;
-	margin:20px;
 
-/*				 공책 줄무늬
-*/				
-    background-color: #fff;
-	background-image:
-	linear-gradient(90deg, transparent 160px, #abced4 160px, #abced4 162px, transparent 162px),
-	linear-gradient(#eee .1em, transparent .1em);
-	background-size: 100% 1.2em;
-    
- 
-    }
+article p {
+	padding-left: 50px;
+	text-indent:4%;
 
-   @media (max-width: 800px) {
-        .article {
-
-            background-color: #fff;
-            background-image:
-            linear-gradient(90deg, transparent 63px, #abced4 63px, #abced4 65px, transparent 65px),
-            linear-gradient(#eee .1em, transparent .1em);
-            background-size: 100% 1.2em;
-            
-    }
-        
-	
-	/*background-color: #eddc8a;
-	background-image: url("https://www.transparenttextures.com/patterns/exclusive-paper.png");
-	 This is mostly intended for prototyping; please download the pattern and re-host for production environments. Thank you! */
 }
 
-.on_off {
-    text-align: right;
-    float: right;
-    position: relative;
-    left: 40px;
-    bottom: 5px;
-    
+/*lable {
+	font-weight: bold;
+}*/
+
+.right {
+	text-align: right;
 }
+
+
+

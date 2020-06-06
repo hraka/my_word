@@ -1,0 +1,28 @@
+@media (max-width: 600px) {
+	body {
+		font-size : 1rem;
+		padding: 0;
+		margin: 0;
+	}
+
+	#content {
+		display: block;
+	}
+
+	#set {
+		padding: 0;
+	}
+
+	.btn {
+		padding: 2%;
+	}
+
+	article {
+		border-radius: 70px;
+		padding-top:15%;
+	}
+
+	.middle_of_meaning {
+		min-height: 50px;
+	}
+}
