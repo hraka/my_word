@@ -2,15 +2,6 @@ p, ul {
 	padding:10px;
 }
 
-
-
-
-ul {
-	font-style:italic;
-	color:red;
-	font-family: 'Noto Sans KR';
-}
-
 a{
 	text-decoration: none;
 	color: black;
@@ -21,6 +12,8 @@ body {
 	padding:8%;
 	padding-top:44px;
     font-family: 'Nanum Myeongjo';
+    font-size: 1.2rem;
+    line-height: 1.8rem;
 
 /*	background-color:#fee464;*/
 /*
@@ -31,7 +24,30 @@ body {
 
 }
 
-#categories {
+#content {
+	
+	display:grid;
+	grid-template-columns: 17% 90%/*1fr*/;
+
+}
+
+#set {
+	padding:5%;
+}
+
+
+.word_list {
+	color:red;
+	font-family: 'Noto Sans KR';
+}
+
+.category_list {
+	list-style: none;
+	font-weight: bold;
+}
+
+/* 카테고리와 단어 리스트 */
+#categories { 
 	border-right: #eb4 1px dotted;
 	margin:0;
 	padding-left:30px;
@@ -51,69 +67,67 @@ h2 {
 	text-indent: 14px;
 }
 
+#word, article {
+	margin:2%;
+}
 #word {
-	border: 3px powderblue solid;
+	border: 1px powderblue solid;
 	border-radius: 44px;
-	padding: 50px;
-	padding-left:100px;
-	margin:20px;
-	margin-bottom:44px;
+	padding: 5%;
+	padding-left:10%;
+	margin-bottom:4.4%;
+
+	box-sizing: border-box;
+
+	box-shadow: 1px 3px 5px powderblue;
 }
-
-#content {
-	
-	display:grid;
-	grid-template-columns: 17% 1fr;
-
-}
-
-#set {
-	padding:52px;
-}
-
-
-.move#add {
-    background-color:aqua;
-    border: 1px solid gray;
-    border-radius: 90px;
-    width:50px;
-    height:50px;
-    text-align: center;
-    font-size: 33px;
-    color: cadetblue;
-    
-    position: fixed;
-    bottom: 50px;
-    right: 30px;
-    
-}
-
 article {
 
 	font-family: 'Noto Sans KR';
 
-	border: 1px solid gray;
+	border: 0px solid gray;
 
 	background-color:white;
-	padding:100px;
-	padding-top:30px;
-	padding-bottom:52px;
+	padding-left:15%;
+	padding-right: 10%;
+	padding-top:8%;
+	padding-bottom:3%;
 	border-radius:90px;
-	margin:20px;
 
 	box-sizing: border-box;
-	min-height: 50px;
 
 /*				 공책 줄무늬
 */				
     background-color: #fff;
 	background-image:
-	linear-gradient(90deg, transparent 160px, #abced4 160px, #abced4 162px, transparent 162px),
+	linear-gradient(90deg, transparent 13%, #abced4 13%, #abced4 13.1%, transparent 13.1%),
 	linear-gradient(#eee .1em, transparent .1em);
-	background-size: 100% 1.2em;
-    
- 
+	background-size: 100% 1.5em;
+
+	box-shadow: 1px 1px 4px hsla(0, 0%, 0%, 0.2);
+
+    word-break: break-all;
+    /*    word-wrap: break-word; 을 적용하면 url의 경우 -다음에 긴 문자가 나올 시 사이 공백이 크게 들어가기도 한다.
+*/
+
     }
+
+    .middle_of_meaning {
+    	min-height: 120px;
+    }
+
+    .bottom_of_meaning {
+		margin-top: 20px;
+		margin-bottom: 10px;
+	}
+
+	.source {
+		color: powderblue;
+		font-size:1rem;
+		text-align : left;
+
+	}
+
 
    @media (max-width: 800px) {
         .article {
@@ -121,11 +135,10 @@ article {
             background-color: #fff;
             background-image:
             linear-gradient(90deg, transparent 63px, #abced4 63px, #abced4 65px, transparent 65px),
-            linear-gradient(#eee .1em, transparent .1em);
-            background-size: 100% 1.2em;
+            linear-gradient(#eee .1rem, transparent .1rem);
+            background-size: 100% 1.2rem;
             
-    }
-        
+    }        
 	
 	/*background-color: #eddc8a;
 	background-image: url("https://www.transparenttextures.com/patterns/exclusive-paper.png");
@@ -156,11 +169,17 @@ article {
 
 
 input[type="text"], textarea {
-	font-size: 1.5rem;
 	width: 100%;
 	padding: 20px;
-		box-sizing: border-box;
+	box-sizing: border-box;
+}
 
+input[type="text"] {
+	font-size: 1.0rem;
+}
+
+textarea {
+	font-size: 1.5rem;
 }
 
 textarea {
@@ -172,6 +191,22 @@ textarea {
 	grid-template-columns: auto 90%;
 }
 
+
+.move#add {
+    background-color:aqua;
+    border: 1px solid gray;
+    border-radius: 90px;
+    width:50px;
+    height:50px;
+    text-align: center;
+    font-size: 33px;
+    color: cadetblue;
+    
+    position: fixed;
+    bottom: 50px;
+    right: 30px;
+    
+}
 
 
 
@@ -189,7 +224,5 @@ article p {
 	text-align: right;
 }
 
-.bottom_of_meaning {
-	margin-top: 20px;
-}
+
 
