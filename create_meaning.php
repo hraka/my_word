@@ -5,7 +5,10 @@
 		<title>언어 사전</title>
 		<meta charset="utf-8">
 		<link rel="stylesheet" href="style.css">
-		<link href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo|Noto+Sans+KR&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="switch.css">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo|Noto+Sans+KR&display=swap" >
+		<link rel="stylesheet" href="style_mobile.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 
 	<body>
@@ -37,9 +40,8 @@
                         
                         
                         <p>
-                        	<label> 출처: 
-                        		<input type="text" name="source">
-                    		</label>
+                        	<label for="source"> 출처: </label>
+                        	<input type="text" name="source" id="source" placeholder="출처가 있는 경우 적어주세요">
                         </p>
 
                         <p>	
