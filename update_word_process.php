@@ -24,7 +24,7 @@ if($synonyms[0] != '') {
     while($i < count($synonyms)) {
         //단어 검색
         $sql_search = "
-            SELECT id FROM word WHERE word_name = '{$synonyms[0]}'";
+            SELECT id FROM word WHERE word_name = '{$synonyms[$i]}'";
         //단어는 하나 나온다고 가정
         $result_search  = mysqli_query($conn, $sql_search);
         $row = mysqli_fetch_array($result_search);
