@@ -1,20 +1,25 @@
 <?php
+
 $conn = mysqli_connect(
 	'localhost',
 	'root', 
 	'1111', 
 	'words');
 
-
-
 $word_info = array(
 	'word_name' => 'Welcome',
 	'profile' => 'Hello, This is your Dictionary');
 
 $category_list = "<li><a href=\"index.php?\">전체</a></li>";
+$selected_category = '';
+$list = '';
+$printing_meanings = '';
+$printing_synonyms = '';
+
 
 $sql_category_list = "SELECT id, category_name FROM category LIMIT 1000";
 $result_category_list = mysqli_query($conn, $sql_category_list);
+
 while($row_category_list = mysqli_fetch_array($result_category_list)) {
 	$escaped_category = htmlspecialchars($row_category_list['category_name']);
 	$category_list = $category_list."<li><a href=\"index.php?category={$row_category_list['id']}\">{$escaped_category}</a></li>";
@@ -23,7 +28,6 @@ while($row_category_list = mysqli_fetch_array($result_category_list)) {
 $sql_word_list = "SELECT id, word_name FROM word ORDER BY word_name LIMIT 1000";
 $filtered_category_id = 0;
 
-$selected_category = '';
 if(isset($_GET['category']) && $_GET['category'] > 0) {
 	$filtered_category_id = mysqli_real_escape_string($conn, $_GET['category']);
 	$sql_word_list = "SELECT id, word_name FROM categorizing LEFT JOIN word ON categorizing.word_id = word.id WHERE category_id ={$filtered_category_id} ORDER BY word_name"; //*보다 word_name 으로 컬럼명 특정하는게 나을까? 어차피 category_id를 색인하느라 여러 컬럼을 다 읽는 거 아닐까? 가져오는 건 또 다른가? 어디에 쓰는 것도 아닌데도? fetch과정에서 다른가? result에 들어가는 field count 값이 다르다.
@@ -36,36 +40,33 @@ if(isset($_GET['category']) && $_GET['category'] > 0) {
 
 $result_word_list = mysqli_query($conn, $sql_word_list);
 
-$list = '';
 while($row_word_list = mysqli_fetch_array($result_word_list)) {
 	$escaped_title = htmlspecialchars($row_word_list['word_name']);
 	$list = $list."<li><a href=\"index.php?category={$filtered_category_id}&word={$row_word_list['id']}\">{$escaped_title}</a></li>";
 }
 
 
-
-$printing_meanings = '';
-
 if(isset($_GET['word'])) { //word id를 받는다.
 	$filtered_word_id = mysqli_real_escape_string($conn, $_GET['word']); //word_info와 통합시킬까?ㄴ
 	$sql_word = "SELECT * FROM word WHERE id=\"{$filtered_word_id}\"";
 	$result_word = mysqli_query($conn, $sql_word);
-
-	$row_word = mysqli_fetch_array($result_word);
-	
+	$row_word = mysqli_fetch_array($result_word);	
 	$word_info['word_name'] = htmlspecialchars($row_word['word_name']);
 	$word_info['profile'] = htmlspecialchars($row_word['profile']);
 
-
-//	$sql_synonym = "SELECT * FROM relation_synonym WHERE sub_id =\"{$filtered_word_id}\"";
+	$sql_synonym = "SELECT id, word_name FROM relation_synonym LEFT JOIN word ON relation_synonym.obj_word_id = word.id WHERE sub_word_id =\"{$filtered_word_id}\"";
+	$result_synonym = mysqli_query($conn, $sql_synonym);
+	while ($row_synonym = mysqli_fetch_array($result_synonym)) {
+		$escaped_synonym = htmlspecialchars($row_synonym['word_name']);
+		$escaped_synonym_id = htmlspecialchars($row_synonym['id']);
+		$printing_synonyms = $printing_synonyms." <a href=\"index.php?category={$filtered_category_id}&word={$escaped_synonym_id}\">[".$escaped_synonym."]</a>";
+	}
 
 
 	$sql_meaning = "SELECT * FROM meaning WHERE word_id={$filtered_word_id} ORDER BY created DESC";
 	$result_meaning = mysqli_query($conn, $sql_meaning);
 
 	while($row_meaning = mysqli_fetch_array($result_meaning)) {
-
-	
 		$escaped_meaning = nl2br(htmlspecialchars($row_meaning['meaning']));
 		$escaped_meaning_id = htmlspecialchars($row_meaning['id']);
 		$escaped_time = htmlspecialchars($row_meaning['created']);
@@ -74,10 +75,8 @@ if(isset($_GET['word'])) { //word id를 받는다.
 			$escaped_source = '출처 : '.htmlspecialchars($row_meaning['source']);
 		}
 
-
 		$printing_meanings = $printing_meanings."
 			<article>
-
 				<div class='on_off'>
 					<label class=\"switch\">
 						<!-- 내 세상으로 초대 -->
@@ -151,6 +150,7 @@ if(isset($_GET['word'])) { //word id를 받는다.
                     <strong>                    	
                     	<?=$word_info['profile']?>
                     </strong>
+                    
                     <?php
                     if(isset($_GET['word'])){
                     	?>            
@@ -166,6 +166,8 @@ if(isset($_GET['word'])) { //word id를 받는다.
 	                   	</form>
 	                </div>
                 </div>
+
+                유의어 : <?=$printing_synonyms?>
 
 				<form action="create_meaning.php" method="post" class="right">
 	           		<input type="hidden" name="word_id" value="<?=$filtered_word_id?>">
