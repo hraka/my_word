@@ -87,13 +87,10 @@ if(isset($_GET['word'])) { //word id를 받는다.
 		$printing_off_class = '';
 		$printing_checked = 'checked';
 
-		var_dump($escaped_onoff);
 		if($escaped_onoff == '0') {
 			$printing_off_class = "class=\"off\"";
 			$printing_checked = "";
 		}
-
-		echo ($printing_off_class);
 
 		$printing_meanings = $printing_meanings."
 			<article id=\"meaning_{$escaped_meaning_id}\" {$printing_off_class}>

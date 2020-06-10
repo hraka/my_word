@@ -12,8 +12,8 @@ body {
 	padding:8%;
 	padding-top:44px;
     font-family: 'Nanum Myeongjo';
-    font-size: 1.2rem;
-    line-height: 1.8rem;
+    font-size: 1.1rem;
+    line-height: 1.7rem;
 
 /*	background-color:#fee464;*/
 /*
@@ -110,6 +110,10 @@ article {
     /*    word-wrap: break-word; 을 적용하면 url의 경우 -다음에 긴 문자가 나올 시 사이 공백이 크게 들어가기도 한다.
 */
 
+    }
+
+    article.off {
+    	background-color: #bbb;
     }
 
     .middle_of_meaning {
