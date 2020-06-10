@@ -104,6 +104,7 @@ if(isset($_GET['word'])) { //word id를 받는다.
 						<input type=\"hidden\" name=\"m_id\" value={$escaped_meaning_id}>
 						<input type=\"hidden\" name=\"category_id\" value={$filtered_category_id}>
 						<input type=\"hidden\" name=\"word_id\" value={$filtered_word_id}>
+						<input type=\"hidden\" name=\"now_onoff\" value={$escaped_onoff}>
 					</label>
 				</form>
 
