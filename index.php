@@ -45,6 +45,14 @@ while($row_word_list = mysqli_fetch_array($result_word_list)) {
 	$list = $list."<li><a href=\"index.php?category={$filtered_category_id}&word={$row_word_list['id']}\">{$escaped_title}</a></li>";
 }
 
+/*function testfun2($m_id)
+{
+   echo "Your test function on button click is working";
+}
+
+if(array_key_exists('on_off_work',$_POST)){
+   testfun2($_POST['on_off_work']);
+}*/
 
 if(isset($_GET['word'])) { //word id를 받는다.
 	$filtered_word_id = mysqli_real_escape_string($conn, $_GET['word']); //word_info와 통합시킬까?ㄴ
@@ -71,19 +79,33 @@ if(isset($_GET['word'])) { //word id를 받는다.
 		$escaped_meaning_id = htmlspecialchars($row_meaning['id']);
 		$escaped_time = htmlspecialchars($row_meaning['created']);
 		$escaped_source = '';
+		$escaped_onoff = htmlspecialchars($row_meaning['onoff']);
 		if($row_meaning['source'] !== NULL) {
 			$escaped_source = '출처 : '.htmlspecialchars($row_meaning['source']);
 		}
 
+		$printing_off_class = '';
+		$printing_checked = 'checked';
+
+		var_dump($escaped_onoff);
+		if($escaped_onoff == '0') {
+			$printing_off_class = "class=\"off\"";
+			$printing_checked = "";
+		}
+
+		echo ($printing_off_class);
+
 		$printing_meanings = $printing_meanings."
-			<article>
-				<div class='on_off'>
+			<article id=\"meaning_{$escaped_meaning_id}\" {$printing_off_class}>
+				<form method=\"post\" class=\"on_off\" action=\"checked_process.php\">
 					<label class=\"switch\">
-						<!-- 내 세상으로 초대 -->
-						<input type=\"checkbox\">
+						<input type=\"checkbox\" name=\"on_off\" id=\"on_off\"value=\"눌렸어\"onclick=\" button_click('{$escaped_meaning_id}');\" onChange=\"this.form.submit()\" {$printing_checked}>
 						<span class=\"slider round\"></span>
+						<input type=\"hidden\" name=\"m_id\" value={$escaped_meaning_id}>
+						<input type=\"hidden\" name=\"category_id\" value={$filtered_category_id}>
+						<input type=\"hidden\" name=\"word_id\" value={$filtered_word_id}>
 					</label>
-				</div>
+				</form>
 
 				<div class=\"middle_of_meaning\">
 					{$escaped_meaning}
@@ -122,6 +144,13 @@ if(isset($_GET['word'])) { //word id를 받는다.
 		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nanum+Myeongjo|Noto+Sans+KR&display=swap" >
 		<link rel="stylesheet" href="style_mobile.css">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<script>
+			function button_click(m_id) {
+				var instance = document.getElementById("meaning_"+ m_id);
+				instance.classList.toggle('off');
+				alert ("meaning_" + m_id + "버튼을 누르셨습니다.");
+			}
+		</script>
 	</head>
 	<body>
 		<header>
@@ -184,5 +213,7 @@ if(isset($_GET['word'])) { //word id를 받는다.
                    <?=$printing_meanings?>
 			</div>
 		</div>
+		
 	</body>
 </html> 
+
