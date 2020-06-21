@@ -10,7 +10,7 @@ $conn = mysqli_connect(
 $filtered = array(
 	'word_id' => mysqli_real_escape_string($conn, $_POST['word_id']), //꼭 필요 없을수도? 이미 필터 처리된 내용만 오려나?
 	'meaning' => mysqli_real_escape_string($conn, $_POST['meaning']),
-	'source' => mysqli_real_escape_string($conn, $_POST['source'])
+	'source' => mysqli_real_escape_string($conn, trim($_POST['source']))
 );
 
 
