@@ -47,14 +47,16 @@ body {
 }
 
 /* 카테고리와 단어 리스트 */
-#categories { 
+#left_content { 
 	border-right: #eb4 1px dotted;
 	margin:0;
 	padding-left:30px;
 	padding-top:60px;
 }
 
-h1 {
+
+
+header {
 	border-bottom: #eb4 1px dotted;
 	padding:30px;
 	margin:0;
@@ -174,12 +176,16 @@ article {
 
 input[type="text"], textarea {
 	width: 100%;
-	padding: 20px;
+	padding: 2%;
 	box-sizing: border-box;
 }
 
 input[type="text"] {
 	font-size: 1.0rem;
+}
+
+.mini_text {
+	max-width:200px;
 }
 
 textarea {

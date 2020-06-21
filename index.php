@@ -15,6 +15,7 @@ $selected_category = '';
 $list = '';
 $printing_meanings = '';
 $printing_synonyms = '';
+$cat_word_list = '';
 
 
 $sql_category_list = "SELECT id, category_name FROM category LIMIT 1000";
@@ -30,20 +31,34 @@ $filtered_category_id = 0;
 
 if(isset($_GET['category']) && $_GET['category'] > 0) {
 	$filtered_category_id = mysqli_real_escape_string($conn, $_GET['category']);
-	$sql_word_list = "SELECT id, word_name FROM categorizing LEFT JOIN word ON categorizing.word_id = word.id WHERE category_id ={$filtered_category_id} ORDER BY word_name"; //*보다 word_name 으로 컬럼명 특정하는게 나을까? 어차피 category_id를 색인하느라 여러 컬럼을 다 읽는 거 아닐까? 가져오는 건 또 다른가? 어디에 쓰는 것도 아닌데도? fetch과정에서 다른가? result에 들어가는 field count 값이 다르다.
+	$sql_word_list = "SELECT id, word_name FROM categorizing LEFT JOIN word ON categorizing.word_id = word.id WHERE category_id ={$filtered_category_id} ORDER BY word_name"; //
 
 	$sql_category = "SELECT * FROM category WHERE id = {$filtered_category_id}";
 	$result_category = mysqli_query($conn, $sql_category);
 	$row_category = mysqli_fetch_array($result_category);
-	$selected_category = ': '.htmlspecialchars($row_category['category_name']);
+	$selected_category = htmlspecialchars($row_category['category_name']);
+
+	$word_info['word_name'] = $selected_category.' 카테고리';
+
 }
 
 $result_word_list = mysqli_query($conn, $sql_word_list);
 
 while($row_word_list = mysqli_fetch_array($result_word_list)) {
-	$escaped_title = htmlspecialchars($row_word_list['word_name']);
-	$list = $list."<li><a href=\"index.php?category={$filtered_category_id}&word={$row_word_list['id']}\">{$escaped_title}</a></li>";
+	$escaped_word = htmlspecialchars($row_word_list['word_name']);
+	$list = $list."<li><a href=\"index.php?category={$filtered_category_id}&word={$row_word_list['id']}\">{$escaped_word}</a></li>";
+
+	$cat_word_list = $cat_word_list."<span>{$escaped_word} </span>";
 }
+
+if(isset($_GET['category']) && $_GET['category'] > 0) {
+	$word_info['profile'] = $cat_word_list."
+		<form>
+			<input type='text' class='mini_text'>
+			<input type='submit' class='btn' value='추가'>
+		</form>
+		";
+	}
 
 /*function testfun2($m_id)
 {
@@ -152,22 +167,43 @@ if(isset($_GET['word'])) { //word id를 받는다.
 	</head>
 	<body>
 		<header>
-			<h1><a href="index.php">언어 사전 </a> <?=$selected_category?></h1>
+			<h1><a href="index.php">언어 사전</a></h1>
 		</header>	
 		<div id="content">
-			<nav id="categories">
-				<label><strong>카테고리</strong>
-					<ul class="category_list">
-						<?=$category_list?>
-					</ul>
-					<input type="button" class="btn" value="카테고리 만들기" onclick = "location.href = 'create_category.php'">
+			<div id="left_content">
 
-					<ul class="word_list">
-						<?=$list?>
-					</ul>
-				</label>
-				<input type="button" class="btn" name="만들기" value="만들기" onclick = "location.href = 'create.html'">
-			</nav>
+				<form>
+					<input type="text" name="search">
+					<input type="submit" name="" value="검색">
+				</form>
+				<nav id="categories">
+					<button onclick="
+						document.getElementById('categories').style.display='none';
+						document.getElementById('open_category_btn').style.display='block';
+						">
+						카테고리 접기
+					</button>
+					<br>
+					<label><strong>카테고리</strong>
+						<ul class="category_list">
+							<?=$category_list?>
+						</ul>
+						<input type="button" class="btn" value="카테고리 설정" onclick = "location.href = 'category_set.php'">
+
+						<ul class="word_list">
+							<?=$list?>
+						</ul>
+					</label>
+				</nav>
+				<button id="open_category_btn" style="display: none" onclick="
+					document.getElementById('categories').style.display='block';
+					this.style.display='none';
+				">
+					카테고리 펼치기
+				</button>
+
+				<input type="button" class="btn" name="만들기" value="단어 만들기" onclick = "location.href = 'create.html'">
+			</div>
 			<div id="set">
 						    
 				<div id="word">
@@ -194,12 +230,12 @@ if(isset($_GET['word'])) { //word id를 받는다.
 	                </div>
                 </div>
 
-                유의어 : <?=$printing_synonyms?>
+                유의어 <?=$printing_synonyms?>
 
 				<form action="create_meaning.php" method="post" class="right">
 	           		<input type="hidden" name="word_id" value="<?=$filtered_word_id?>">
 	           		<input type="hidden" name="word_name" value="<?=$word_info['word_name']?>">
-	           		<input type="submit" value="만들기" class="btn">
+	           		<input type="submit" value="뜻 만들기" class="btn">
 	           	</form>
                    	<?php
                    } else {

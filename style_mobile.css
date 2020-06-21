@@ -9,6 +9,14 @@
 		display: block;
 	}
 
+	#categories {
+		display: none;
+	}
+
+	#opne_category_btn {
+		display: block;
+	}
+
 	#set {
 		padding: 0;
 	}
