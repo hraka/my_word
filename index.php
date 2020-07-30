@@ -79,7 +79,7 @@ while($row_word_list = mysqli_fetch_array($result_word_list)) {
 
 
 
-function show_word_card($sql, $conn, $show_num){
+function show_word_card_in_main($sql, $conn, $show_num){
 	// $sql = "SELECT id, word_name FROM word ORDER BY id DESC LIMIT {$show_num}";
 
 	// if($filtered_category_id > 0) {
@@ -93,7 +93,7 @@ function show_word_card($sql, $conn, $show_num){
 		$filtered_word_id = htmlspecialchars($row['id']);
 
 		$card_list = $card_list."
-			<a href='index.php?category={$filtered_category_id}&word={$filtered_word_id}'><article>
+			<a href='index.php?category={$filtered_category_id}&word={$filtered_word_id}'><div class='meaning'>
 				<form method=\"post\" class=\"on_off\" action=\"\">
 						<label class=\"switch\">
 							<input type=\"checkbox\" name=\"on_off\" id=\"on_off\"value=\"눌렸어\"onclick=\"\" onChange=\"this.form.submit()\">
@@ -105,13 +105,13 @@ function show_word_card($sql, $conn, $show_num){
 						</label>
 					</form>
 				{$escaped_word}
-			</article></a>";
+			</div></a>";
 	}
 
 	return $card_list;
 }
 
-$card_list = show_word_card($sql_word_list, $conn, 15);
+$card_list = show_word_card_in_main($sql_word_list, $conn, 15);
 
 
 if(isset($_GET['category']) && $_GET['category'] > 0) {
@@ -141,7 +141,7 @@ function show_meaning_card($filtered_word_id, $conn){
 		$escaped_time = htmlspecialchars($row['created']);
 		$escaped_source = '';
 		$escaped_onoff = htmlspecialchars($row['onoff']);
-		if($row['source'] !== NULL) {
+		if($row['source'] != NULL) { //!==에서는 row['source']가 ''일 때도 출처가 표기됨  
 			$escaped_source = '출처 : '.htmlspecialchars($row['source']);
 		}
 
@@ -154,7 +154,7 @@ function show_meaning_card($filtered_word_id, $conn){
 		}
 
 		$printing_meanings = $printing_meanings."
-			<article id=\"meaning_{$escaped_meaning_id}\" {$printing_off_class}>
+			<div class=\"meaning\" id=\"meaning_{$escaped_meaning_id}\" {$printing_off_class}>
 				<form method=\"post\" class=\"on_off\" action=\"checked_process.php\">
 					<label class=\"switch\">
 						<input type=\"checkbox\" name=\"on_off\" id=\"on_off\"value=\"눌렸어\"onclick=\" button_click('{$escaped_meaning_id}');\" onChange=\"this.form.submit()\" {$printing_checked}>
@@ -187,19 +187,27 @@ function show_meaning_card($filtered_word_id, $conn){
 							</form>
 					</span>
 				</div>
-			</article>
+			</div>
 		";
 	}
 	return $printing_meanings;
 }
 
+function get_word_card_each(){}
+
 if(isset($_GET['word'])) { //word id를 받는다.
 	$filtered_word_id = mysqli_real_escape_string($conn, $_GET['word']); //word_info와 통합시킬까?ㄴ
-	$sql_word = "SELECT * FROM word WHERE id=\"{$filtered_word_id}\"";
+	$add_world = "";
+
+	$sql_word = "SELECT word.id, word_name, profile, world_name FROM word LEFT JOIN world ON word.world = world.id WHERE word.id=\"{$filtered_word_id}\"";
 	$result_word = mysqli_query($conn, $sql_word);
-	$row_word = mysqli_fetch_array($result_word);	
+	$row_word = mysqli_fetch_array($result_word);
+	$filtered_word_world_name = htmlspecialchars($row_word['world_name']);	
+	if($filtered_word_world_name != NULL) {
+		$add_world = "[{$filtered_word_world_name}]세계의 단어 <br>";
+	}
 	$word_info['word_name'] = htmlspecialchars($row_word['word_name']);
-	$word_info['profile'] = htmlspecialchars($row_word['profile']);
+	$word_info['profile'] = $add_world.htmlspecialchars($row_word['profile']);
 
 	$printing_synonyms = show_synonym_list($filtered_word_id, $conn);
 	$printing_meanings = show_meaning_card($filtered_word_id, $conn);
@@ -252,6 +260,9 @@ while($row = mysqli_fetch_array($result)) {
 				<ul>
 					<?=$printing_world?>
 				</ul>
+
+				<input type="button" class="btn" value="세계 만들기" onclick = "location.href = 'create_world.php'">
+
 				<nav id="categories">
 					<button onclick="
 						document.getElementById('categories').style.display='none';
