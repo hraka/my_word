@@ -6,7 +6,8 @@ $conn = mysqli_connect(
 	'1111', 
 	'words');
 
-$sql = "SELECT * FROM word WHERE id={$_POST['word_id']};";
+$word_id = $_POST['word_id'];
+$sql = "SELECT * FROM word WHERE id={$word_id};";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_array($result);
 
@@ -14,6 +15,30 @@ $filtered = array(
 	'word_name' => htmlspecialchars($row['word_name']),
 	'profile' => htmlspecialchars($row['profile'])
 );
+
+// $sql = "SELECT * FROM categorizing WHERE word_id = {$word_id}";
+
+
+// $category_list = "<option value='NULL'> 전체 </option>";
+// $sql = "SELECT id, category_name FROM category";
+// $result = mysqli_query($conn, $sql);
+// while ($row = mysqli_fetch_array($result)) {
+// 	$escaped_category_id = htmlspecialchars($row['id']);
+// 	$escaped_category_name = htmlspecialchars($row['category_name']);
+// 	$category_list = $category_list."
+// 		<option value='{$escaped_category_id}'> {$escaped_category_name} </option>";
+// }
+
+$world_list = "<option value='NULL'> 전체 </option>";
+$sql = "SELECT id, world_name FROM world";
+$result = mysqli_query($conn, $sql);
+while ($row = mysqli_fetch_array($result)) {
+	$escaped_world_id = htmlspecialchars($row['id']);
+	$escaped_world_name = htmlspecialchars($row['world_name']);
+	$world_list = $world_list."
+		<option value='{$escaped_world_id}'> {$escaped_world_name} </option>";
+}
+
 
 ?> 
 <!doctype html>
@@ -69,6 +94,11 @@ $filtered = array(
                         	
                         </p>
 
+                        <p>
+                        	<select name="world">
+                        	<?=$world_list?>
+                        	</select>
+                        </p>
 
                         <p>	
                         	<input type="submit" value="수정하기" class="btn">
