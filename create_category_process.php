@@ -31,10 +31,7 @@ if($result === false){
 	echo '성공했습니다. <a href="index.php">돌아가기</a>';
 
 	sleep(2);
-	header("Location : index.php");
+	header("Location: index.php");
 
 }
-echo $sql;
-// file_put_contents('data/'.$_POST['word_name'], $_POST['meaning']);
-// header('Location: /index.php?word='.$_POST['word_name']);
 ?>
