@@ -6,7 +6,7 @@ $conn = mysqli_connect(
 	'1111', 
 	'words');
 
-$category_list = '카테고리를 선택해주세요'; 
+$category_list = ''; 
 
 $sql_category_list = "SELECT id, category_name FROM category LIMIT 1000";
 

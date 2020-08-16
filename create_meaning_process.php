@@ -10,21 +10,19 @@ $conn = mysqli_connect(
 $filtered = array(
 	'word_id' => mysqli_real_escape_string($conn, $_POST['word_id']), //꼭 필요 없을수도? 이미 필터 처리된 내용만 오려나?
 	'meaning' => mysqli_real_escape_string($conn, $_POST['meaning']),
-	'source' => mysqli_real_escape_string($conn, trim($_POST['source'])),
-	'world_id' => mysqli_real_escape_string($conn, $_POST['world'])
+	'source' => mysqli_real_escape_string($conn, trim($_POST['source']))
 );
 
 
 $sql = "
 	INSERT INTO meaning
-		(meaning, source, word_id, author_id, created, world_id)
+		(meaning, source, word_id, author_id, created)
 		VALUES(
 			'{$filtered['meaning']}',
 			'{$filtered['source']}',
 			'{$filtered['word_id']}',
 			'1111',
-			NOW(),
-			{$filtered['world_id']}
+			NOW()
 		)
 	";
 
