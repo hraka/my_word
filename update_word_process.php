@@ -22,13 +22,14 @@ echo count($synonyms);
 print_r($synonyms);
 
 $add_world = '';
-if($filtered['world'] != 'NULL') {
-    echo '이써';
-    $add_world = ", world = '".$filtered['world']."'";
-} else {
-    echo '없써';
-    $add_world = ", world = NULL";
-}
+$add_world = ", world = ".$filtered['world'];
+// if($filtered['world'] != 'NULL') {
+//     echo '이써';
+//     $add_world = ", world = '".$filtered['world']."'";
+// } else {
+//     echo '없써';
+//     $add_world = ", world = NULL"; //왜 합칠 수 없었지?
+// }
 
 if($synonyms[0] != '') {
     while($i < count($synonyms)) {
