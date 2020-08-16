@@ -1,10 +1,12 @@
 <?php
 
+function connect_to_mysql(){}
 $conn = mysqli_connect(
 	'localhost',
 	'root', 
 	'1111', 
 	'words');
+
 
 $word_info = array(
 	'word_name' => '전체 단어 보기',
@@ -19,6 +21,22 @@ $card_list = '';
 
 
 
+$printing_world = '';
+
+function get_world_list($conn) {
+
+	$sql = "SELECT id, world_name FROM world";
+	$result = mysqli_query($conn, $sql);
+	while($row = mysqli_fetch_array($result)) {
+		$escaped_world = htmlspecialchars($row['world_name']);
+		$escaped_world_id = htmlspecialchars($row['id']);
+		$printing_world = $printing_world."
+			<li><a href='index.php?world={$escaped_world_id}'>{$escaped_world}</a></li>";
+	}
+	return $printing_world;
+}
+$printing_world = get_world_list($conn);
+
 
 
 function get_category_list($conn) {
@@ -28,7 +46,8 @@ function get_category_list($conn) {
 
 	while($row_category_list = mysqli_fetch_array($result_category_list)) {
 		$escaped_category = htmlspecialchars($row_category_list['category_name']);
-		$category_list = $category_list."<li><a href=\"index.php?category={$row_category_list['id']}\">{$escaped_category}</a></li>";
+		$escaped_category_id = htmlspecialchars($row_category_list['id']);
+		$category_list = $category_list."<li><a href=\"index.php?category={$escaped_category_id}\">{$escaped_category}</a></li>";
 	}
 
 	return $category_list;
@@ -48,7 +67,15 @@ $show_num = 1000;
 $sql_word_list = "SELECT id, word_name FROM word ORDER BY word_name";
 $filtered_category_id = 0;
 
-if(isset($_GET['category']) && $_GET['category'] > 0) {
+if(isset($_GET['world'])) {
+	$filtered_world_id = mysqli_real_escape_string($conn, $_GET['world']);
+	$sql_word_list = "SELECT DISTINCT word.id, word_name FROM meaning LEFT JOIN word ON meaning.word_id = word.id WHERE world_id = {$filtered_world_id}";
+
+	$word_info['word_name'] = "세계 선택";
+	$word_info['profile'] = "세계를 선택했습니다";
+
+} 
+else if(isset($_GET['category']) && $_GET['category'] > 0) {
 	$filtered_category_id = mysqli_real_escape_string($conn, $_GET['category']);
 	$sql_word_list = "SELECT id, word_name FROM categorizing LEFT JOIN word ON categorizing.word_id = word.id WHERE category_id ={$filtered_category_id} ORDER BY word_name"; //
 
@@ -58,6 +85,8 @@ if(isset($_GET['category']) && $_GET['category'] > 0) {
 	$selected_category = htmlspecialchars($row_category['category_name']);
 
 	$word_info['word_name'] = $selected_category.' 카테고리';
+	$word_info['profile'] = '카테고리를 선택했습니다';
+
 
 }
 else if(isset($_GET['search'])){
@@ -114,9 +143,6 @@ function show_word_card_in_main($sql, $conn, $show_num){
 $card_list = show_word_card_in_main($sql_word_list, $conn, 15);
 
 
-if(isset($_GET['category']) && $_GET['category'] > 0) {
-	$word_info['profile'] = '카테고리를 선택했습니다';
-	}
 
 function show_synonym_list($filtered_word_id, $conn) {
 	$printing_synonyms = '';
@@ -213,14 +239,7 @@ if(isset($_GET['word'])) { //word id를 받는다.
 	$printing_meanings = show_meaning_card($filtered_word_id, $conn);
 }
 
-$printing_world = '';
-$sql = "SELECT id, world_name FROM world";
-$result = mysqli_query($conn, $sql);
-while($row = mysqli_fetch_array($result)) {
-	$escaped_world = htmlspecialchars($row['world_name']);
-	$printing_world = $printing_world."
-		<li>{$escaped_world}</li>";
-}
+
 
 
 
