@@ -67,7 +67,7 @@ $show_num = 1000;
 $sql_word_list = "SELECT id, word_name FROM word ORDER BY word_name";
 $filtered_category_id = 0;
 
-if(isset($_GET['world'])) {
+if(isset($_GET['world']) && $_GET['world'] > 0) {
 	$filtered_world_id = mysqli_real_escape_string($conn, $_GET['world']);
 	$sql_word_list = "SELECT DISTINCT word.id, word_name FROM meaning LEFT JOIN word ON meaning.word_id = word.id WHERE world_id = {$filtered_world_id}";
 
@@ -99,12 +99,19 @@ else if(isset($_GET['search'])){
 }
 
 $result_word_list = mysqli_query($conn, $sql_word_list." LIMIT {$show_num}");
+$url_now = htmlspecialchars($_SERVER['QUERY_STRING']);
+//$url_now2 = $_SERVER['REQUEST_URI'];
+echo $url_now;
+
 
 while($row_word_list = mysqli_fetch_array($result_word_list)) {
 	$escaped_word = htmlspecialchars($row_word_list['word_name']);
 	$filtered_word_id = htmlspecialchars($row_word_list['id']);
-	$list = $list."<li><a href=\"index.php?category={$filtered_category_id}&word={$row_word_list['id']}\">{$escaped_word}</a></li>";
+
+	$list = $list."<li><a href=\"index.php?".$url_now."&word={$filtered_word_id}\">{$escaped_word}</a></li>";
 }
+
+$card_list = show_word_card_in_main($sql_word_list, $conn, 15);
 
 
 
@@ -117,12 +124,14 @@ function show_word_card_in_main($sql, $conn, $show_num){
 
 	$result = mysqli_query($conn, $sql." LIMIT {$show_num}");
 	$card_list = '';
+
+	$url_now = htmlspecialchars($_SERVER['QUERY_STRING']);
 	while($row = mysqli_fetch_array($result)) {
 		$escaped_word = htmlspecialchars($row['word_name']);
 		$filtered_word_id = htmlspecialchars($row['id']);
 
 		$card_list = $card_list."
-			<a href='index.php?category={$filtered_category_id}&word={$filtered_word_id}'><div class='meaning'>
+			<a href='index.php?".$url_now."&word={$filtered_word_id}'><div class='meaning'>
 				<form method=\"post\" class=\"on_off\" action=\"\">
 						<label class=\"switch\">
 							<input type=\"checkbox\" name=\"on_off\" id=\"on_off\"value=\"눌렸어\"onclick=\"\" onChange=\"this.form.submit()\">
@@ -140,7 +149,6 @@ function show_word_card_in_main($sql, $conn, $show_num){
 	return $card_list;
 }
 
-$card_list = show_word_card_in_main($sql_word_list, $conn, 15);
 
 
 
